@@ -315,7 +315,7 @@ st.markdown("""
   <div class="hero-pill">Enterprise Intelligence Platform</div>
   <div class="hero-title">App Store Product Intelligence</div>
   <div class="hero-subtitle">
-    Automated semantic telemetry, customer sentiment triage, and version regression monitoring engineered for product engineering teams.
+    Turn thousands of app store reviews into actionable product signals: categorize feedback, monitor customer sentiment, and catch buggy releases before ratings drop.
   </div>
 </div>
 """, unsafe_allow_html=True)

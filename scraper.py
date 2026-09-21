@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+from pathlib import Path
 import sys
 import time
 from typing import Optional
@@ -130,9 +131,16 @@ def scrape(app_name: str, count: int = 1000) -> pd.DataFrame:
     # Filter out empty or whitespace-only review text
     df = df[df["review_text"] != ""].drop_duplicates(subset=["review_id"]).reset_index(drop=True)
 
-    # Write clean UTF-8 CSV
+    # Write clean UTF-8 CSV (merge with existing if present to support multi-app telemetry)
+    if Path(OUTPUT_FILE).exists():
+        try:
+            existing_df = pd.read_csv(OUTPUT_FILE, encoding="utf-8")
+            df = pd.concat([existing_df, df], ignore_index=True).drop_duplicates(subset=["review_id"]).reset_index(drop=True)
+        except Exception as e:
+            print(f"[scraper] Note: writing fresh CSV file ({e})")
+
     df.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
-    print(f"[scraper] Ingestion complete. Saved {len(df)} validated reviews -> {OUTPUT_FILE}")
+    print(f"[scraper] Ingestion complete. Saved {len(df)} total validated reviews -> {OUTPUT_FILE}")
     return df
 
 
