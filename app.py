@@ -228,11 +228,12 @@ PLOTLY_LAYOUT = dict(
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="Inter, -apple-system, sans-serif", color="#E2E8F0"),
     margin=dict(l=20, r=20, t=35, b=20),
-    legend=dict(
-        bgcolor="rgba(255,255,255,0.04)",
-        bordercolor="rgba(255,255,255,0.08)",
-        borderwidth=1,
-    ),
+)
+
+PLOTLY_LEGEND = dict(
+    bgcolor="rgba(255,255,255,0.04)",
+    bordercolor="rgba(255,255,255,0.08)",
+    borderwidth=1,
 )
 
 
@@ -433,6 +434,7 @@ with c2:
     )
     fig_sent.update_layout(
         **PLOTLY_LAYOUT,
+        legend=PLOTLY_LEGEND,
         height=320,
         annotations=[
             dict(
@@ -516,7 +518,7 @@ if not ver_df.empty and ver_df["app_version"].nunique() > 1:
             color="#F87171",
             ticksuffix="%",
         ),
-        legend=dict(x=0.01, y=0.98),
+        legend=dict(**PLOTLY_LEGEND, x=0.01, y=0.98),
     )
     st.plotly_chart(fig_reg, width="stretch")
 else:
