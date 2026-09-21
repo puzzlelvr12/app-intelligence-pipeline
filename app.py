@@ -32,7 +32,6 @@ from pipeline import (
 # ─── Page Configuration ──────────────────────────────────────────────────────
 st.set_page_config(
     page_title="App Store Product Intelligence",
-    page_icon="🍏",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -197,6 +196,47 @@ html, body, [class*="css"] {
     color: #E2E8F0;
 }
 
+/* Text Area & Input Styling: Ensure Typed Text is Crisp Solid Black */
+div[data-testid="stTextArea"] textarea,
+.stTextArea textarea,
+div[data-baseweb="textarea"] textarea,
+textarea {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background-color: #FFFFFF !important;
+    caret-color: #000000 !important;
+    border-radius: 12px !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 0.75rem 1rem !important;
+}
+
+div[data-testid="stTextArea"] textarea:focus,
+.stTextArea textarea:focus,
+textarea:focus {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background-color: #FFFFFF !important;
+    border-color: #A78BFA !important;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.35) !important;
+}
+
+div[data-testid="stTextArea"] textarea::placeholder,
+textarea::placeholder {
+    color: #64748B !important;
+    -webkit-text-fill-color: #64748B !important;
+    opacity: 0.8 !important;
+}
+
+div[data-testid="stTextArea"] label p {
+    color: #E2E8F0 !important;
+    font-weight: 600 !important;
+    font-size: 0.92rem !important;
+    margin-bottom: 0.35rem !important;
+}
+
 /* Footer */
 .footer {
     text-align: center;
@@ -272,7 +312,7 @@ def parse_semantic_version(v_str: str) -> Tuple[int, ...]:
 # ─── Hero Header ─────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero-header">
-  <div class="hero-pill">⚡ Enterprise Intelligence Platform</div>
+  <div class="hero-pill">Enterprise Intelligence Platform</div>
   <div class="hero-title">App Store Product Intelligence</div>
   <div class="hero-subtitle">
     Automated semantic telemetry, customer sentiment triage, and version regression monitoring engineered for product engineering teams.
@@ -286,14 +326,13 @@ df = load_data()
 if df.empty:
     st.warning(
         "**Database is empty or missing.** Run the ingestion and ETL pipeline first:\n\n"
-        "```powershell\npython scraper.py\npython pipeline.py\n```",
-        icon="⚠️",
+        "```powershell\npython scraper.py\npython pipeline.py\n```"
     )
     st.stop()
 
 # ─── Sidebar Filtering ───────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("### ⚙️ Data Filters")
+    st.markdown("### Data Filters")
 
     apps = ["All"] + sorted(df["app_name"].dropna().unique().tolist())
     sel_app = st.selectbox("Application", apps)
@@ -340,7 +379,6 @@ st.markdown(f"""
   <div class="kpi-card">
     <div class="kpi-top">
       <span class="kpi-label">Analyzed Volume</span>
-      <span class="kpi-icon">📊</span>
     </div>
     <div class="kpi-value">{total_count:,}</div>
     <div class="kpi-sub">Filtered customer reviews</div>
@@ -348,7 +386,6 @@ st.markdown(f"""
   <div class="kpi-card">
     <div class="kpi-top">
       <span class="kpi-label">Bug Report Rate</span>
-      <span class="kpi-icon">🐛</span>
     </div>
     <div class="kpi-value" style="color:#F87171;">{bug_rate:.1f}%</div>
     <div class="kpi-sub">{bug_count:,} defects reported</div>
@@ -356,7 +393,6 @@ st.markdown(f"""
   <div class="kpi-card">
     <div class="kpi-top">
       <span class="kpi-label">Net Sentiment</span>
-      <span class="kpi-icon">💬</span>
     </div>
     <div class="kpi-value" style="color:{'#34D399' if avg_sentiment >= 0 else '#F87171'};">
       {avg_sentiment:+.3f}
@@ -366,7 +402,6 @@ st.markdown(f"""
   <div class="kpi-card">
     <div class="kpi-top">
       <span class="kpi-label">Praise & CSAT</span>
-      <span class="kpi-icon">⭐</span>
     </div>
     <div class="kpi-value" style="color:#34D399;">{praise_rate:.1f}%</div>
     <div class="kpi-sub">{praise_count:,} positive endorsements</div>
@@ -379,7 +414,7 @@ st.markdown(f"""
 c1, c2 = st.columns([1.1, 0.9], gap="large")
 
 with c1:
-    st.markdown('<div class="section-title">📋 Category Distribution & Volume</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Category Distribution & Volume</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-line"></div>', unsafe_allow_html=True)
 
     cat_summary = (
@@ -412,7 +447,7 @@ with c1:
     st.plotly_chart(fig_cat, width="stretch")
 
 with c2:
-    st.markdown('<div class="section-title">🎭 Customer Sentiment Polarization</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Customer Sentiment Polarization</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-line"></div>', unsafe_allow_html=True)
 
     sent_counts = fdf["sentiment_label"].value_counts().reset_index()
@@ -447,7 +482,7 @@ with c2:
 
 
 # ─── Visualizations: Row 2 (Version Regression Analysis) ──────────────────────
-st.markdown('<div class="section-title">📈 Release Regression Telemetry (Bug Rate % by App Version)</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Release Regression Telemetry (Bug Rate % by App Version)</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-line"></div>', unsafe_allow_html=True)
 
 # Exclude 'Unknown' versions for cleaner release tracking
@@ -475,9 +510,8 @@ if not ver_df.empty and ver_df["app_version"].nunique() > 1:
         spike_ver = high_regressions.iloc[-1]["app_version"]
         spike_val = high_regressions.iloc[-1]["bug_rate_pct"]
         st.info(
-            f"🚨 **Release Regression Alert:** Version `{spike_ver}` exhibited a **{spike_val}% bug incidence rate** "
-            f"(benchmark avg: {mean_rate:.1f}%). Recommend targeted audio/core diagnostics.",
-            icon="⚠️",
+            f"**Release Regression Alert:** Version `{spike_ver}` exhibited a **{spike_val}% bug incidence rate** "
+            f"(benchmark avg: {mean_rate:.1f}%). Recommend targeted audio/core diagnostics."
         )
 
     # Dual line/bar chart for Bug Volume & Bug Rate %
@@ -522,11 +556,11 @@ if not ver_df.empty and ver_df["app_version"].nunique() > 1:
     )
     st.plotly_chart(fig_reg, width="stretch")
 else:
-    st.info("Insufficient multi-version release telemetry in current filter selection.", icon="ℹ️")
+    st.info("Insufficient multi-version release telemetry in current filter selection.")
 
 
 # ─── Rating Distribution ─────────────────────────────────────────────────────
-st.markdown('<div class="section-title">⭐ Customer Star Rating Spectrum</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Customer Star Rating Spectrum</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-line"></div>', unsafe_allow_html=True)
 
 rating_dist = fdf["rating"].value_counts().sort_index().reset_index()
@@ -557,7 +591,7 @@ st.plotly_chart(fig_r, width="stretch")
 
 
 # ─── Tabular Data Explorer ───────────────────────────────────────────────────
-with st.expander("📄 Interactive Feedback Ledger & Drill-down", expanded=False):
+with st.expander("Interactive Feedback Ledger & Drill-down", expanded=False):
     view_cols = [
         "review_date", "app_name", "app_version", "rating",
         "category", "sentiment_label", "sentiment_score", "review_text"
@@ -571,14 +605,14 @@ with st.expander("📄 Interactive Feedback Ledger & Drill-down", expanded=False
             "sentiment_score": st.column_config.ProgressColumn(
                 "Sentiment Polarity", min_value=-1.0, max_value=1.0, format="%.3f"
             ),
-            "rating": st.column_config.NumberColumn("Rating", format="%d ⭐"),
+            "rating": st.column_config.NumberColumn("Rating", format="%d Stars"),
             "review_date": st.column_config.DatetimeColumn("Timestamp", format="YYYY-MM-DD HH:mm"),
         },
     )
 
 
 # ─── Interactive Inference Playground ────────────────────────────────────────
-st.markdown('<div class="section-title">🧪 Real-time NLP Inference & Triage Playground</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Real-Time NLP Inference & Triage Playground</div>', unsafe_allow_html=True)
 st.markdown('<div class="section-line"></div>', unsafe_allow_html=True)
 
 st.markdown('<div class="test-panel">', unsafe_allow_html=True)
